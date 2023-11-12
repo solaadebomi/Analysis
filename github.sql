@@ -11,8 +11,35 @@ where States = 'Texas';
 --Added a new column margin to Texas_Sales
 ALTER TABLE Texas_Sales
 ADD margin float NULL
+    
+-Inputing values into the new column margin
+UPDATE Texas_Sales 
+SET margin = Operating_profit/Total_sales;
 
+--Created a new table called California_Sales
+SELECT States, City, Product, Price_per_unit, Units_sold, Total_sales, Operating_profit
+INTO California__Sales
+from Adidas_Sales
+where States = 'California';
 
+--Add sales column from two tables into a new table-Compare
+SELECT Texas_Sales.Total_sales AS TexasSales, California_Sales.Total_sales AS CaliforniaSales
+INTO Compare
+FROM Texas_Sales
+CROSS JOIN California_Sales;
+
+--Add new column(max_value) to table Compare
+ALTER TABLE Compare
+ADD max_value varchar(50) null
+    
+--Compare Texas_Sales with California_Sales and return the state with the higher Sales in max_value column
+UPDATE Compare
+set max_value =
+CASE
+   WHEN CaliforniaSales > TexasSales THEN 'California'
+   WHEN CaliforniaSales < TexasSales THEN 'Texas'
+   ELSE 'Equal'
+    
 --Total sales for both years for each state
 SELECT States, sum(Total_sales) as sales_per_state
 rank() over( partition by States
