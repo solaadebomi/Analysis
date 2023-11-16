@@ -42,8 +42,8 @@ CASE
     
 --Total sales for both years for each state
 SELECT States, sum(Total_sales) as sales_per_state
-rank() over( partition by States
-order by sales_per_state)
+group by States
+order by sales_per_state
 from Adidas_Sales
 
 
